@@ -1,0 +1,25 @@
+删除日志脚本
+
+#!/bin/bash
+DaysAgo='date -d "3 days ago" +%Y-%m-%d'        //保留三天的记录，日志文件生成格式为2021-01-01
+DaysAgo_gz='date -d "3 days ago" +%Y%m%d'   //日志文件会被压缩，保留三天记录，日志压缩文件格式为20210101
+rm -rf /home/was/netBank/logs/netBank/${DaysAgo}   //删除文件
+rm -rf /home/was/netBank/logs/netBank/${DaysAgo_gz}    //删除文件
+
+远程跨服务器传输文件命令
+在当前服务器质性命令
+scp -r XXX root@10.10.111.1:/home/was/netBank/logs
+XXX ：要传输的文件名
+10.10.111.1 ：要传输的服务器ip
+
+定时任务命令
+查看服务器定时任务  crontab -l
+编辑定时任务             crontab -e
+52 15 * * * sh /home/was/netBank/logs/deletelog.sh
+//表示每天15点52分执行deletelog.sh脚本
+
+删除所有文件，但是保留指定文件XXXX
+注：删除命令在服务器执行的时候需要谨慎，切不可胡乱操作，一定要进入到要删除的目录下面。
+rm -rf !(XXXX)    //XXXX为想保留的文件
+在服务器执行该命令是如果报错，则需要执行
+shopt -s extglob
