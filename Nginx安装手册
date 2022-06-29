@@ -1,0 +1,114 @@
+Nginx安装手册
+
+基础依赖软件检查与安装(root用户)
+gcc检查与安装
+是否安装查看命令： rpm -qa|grep  gcc
+Yum源安装命令：yum install gcc
+gcc-c++检查与安装
+是否安装查看命令： rpm -qa|grep  gcc-c++
+Yum源安装命令：yum install gcc-c++
+Mbank用户创建(root用户)
+用户添加:
+useradd -d /home/mbank -m mbank
+ 
+设置用户组：
+
+usermod -s /bin/sh -g mbank mbank
+ 
+设置密码:
+passwd mbank
+外部依赖软件安装(mbank用户)
+Pcre安装
+将pcre-8.40.tar.gz上传到/home/mbank/soft
+解压
+
+tar -zxvf pcre-8.40.tar.gz
+安装
+
+cd pcre-8.40
+安装命令：
+
+./configure --prefix=/home/mbank/pcre && make && make install
+Zlib安装
+将zlib-1.2.11.tar.gz上传到/home/mbank/soft
+解压
+
+tar -zxvf zlib-1.2.11.tar.gz
+安装
+
+cd zlib-1.2.11
+安装命令：
+
+./configure --prefix=/home/mbank/zlib && make && make install
+ 
+Openssl安装
+将openssl-1.1.0e.tar.gz上传到/home/mbank/soft
+解压
+
+tar -xvzf openssl-1.1.0e.tar.gz
+安装
+
+cd openssl-1.1.0e
+安装命令：
+
+./config --prefix=/home/mbank/openssl && make && make install
+Nginx安装
+将nginx-1.12.0.tar.gz上传到/home/mbank/soft
+解压
+
+tar -xvzf nginx-1.12.0.tar.gz
+3．安装
+
+   cd nginx-1.12.0
+   安装命令：
+
+编译
+
+   ./configure --prefix=/home/mbank/nginx --with-http_ssl_module --with-openssl=/home/mbank/soft/openssl-1.1.0e --with-pcre=/home/mbank/soft/pcre-8.40 --with-zlib=/home/mbank/soft/zlib-1.2.11 --with-http_stub_status_module --with-stream
+ 
+安装
+
+make && make install
+ 
+Nginx配置手册
+1．  Nginx配置文件目录
+
+/home/mbank/nginx/conf
+配置文件修改如下
+
+备份原始配置文件
+
+cp -a nginx.conf nginx.conf.20170703
+将word文档中的ngxin.conf做如下图所示修改后，将配置文件覆盖：
+
+
+
+
+
+
+
+Nginx启动停止命令
+1．  进入指定命令目录
+
+/home/mbank/nginx
+2．  启动
+
+./sbin/nginx
+停止
+
+./sbin/nginx -s stop
+重新加载配置文件
+
+./sbin/nginx -s reload
+查看进程
+
+ps -ef|grep nginx
+ 
+服务器防火墙
+如外部无法访问时,请关闭防火墙
+
+查询防火墙状态:
+systemctl status firewalld
+临时停止防火墙
+
+Systemctl stop firewalld
